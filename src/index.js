@@ -22,10 +22,10 @@ ReactDOM.render(
   	<Router history={browserHistory}>
 		<Route path="/" component={Login} />
     	<Route path="/admin" component={Layout}>
-    		<IndexRoute component={ListEmpresas} />
-    		<Route path="questionario" component={ListEmpresas} />
-    		<Route path="empresa/questionario" component={ListEmpresas} />
-    		<Route path="empresa/questionario/novo" component={ListEmpresas} />
+    	//	<IndexRoute component={ListEmpresas} />
+    	//	<Route path="questionario" component={ListEmpresas} />
+    	//	<Route path="empresa/questionario" component={ListEmpresas} />
+    	//	<Route path="empresa/questionario/novo" component={ListEmpresas} />
     	</Route>
     </Router>
     ),

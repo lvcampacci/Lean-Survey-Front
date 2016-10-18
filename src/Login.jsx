@@ -56,6 +56,8 @@ class Auth extends Component {
 				</CardText>
 
 			</Card>
+
+			
 			</MuiThemeProvider>
 		);
 	}
