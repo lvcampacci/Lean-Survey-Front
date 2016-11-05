@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
-import Header from '../../Header';
 import './Layoute.css';
-import logo from '../../logo.png';
+import logo from '../../imgs/logo.png';
+import logolean from './logolean.png';
 const style = {
   height: 50,
   width: 70,
@@ -16,23 +16,27 @@ class Layout extends Component {
 	render() {
 		return (
 			<MuiThemeProvider>
-				<div><header>
-
-  <div>
-    <Paper style={style} zDepth={1} />
-    <Paper style={style} zDepth={2} />
-    <Paper style={style} zDepth={3} />
-    
-  </div>
-);
-					</header>
-
-					{ this.props.children }
-					
-					<footer>
-					Copyright © 2016 Lean Survey Template. All Right Reserved Designed by SENAI
-					</footer>
-				</div>
+					<div>
+					//cabeçalho com as 3 imagens ou 3 opções do nosso sistema (menu principal)
+								<header>
+									<div>
+									<img src="logolean.png"/>
+									Empresas
+								Relatorio
+										Ajuda
+									</div>
+								</header>
+								<section>
+										//this.props.children ele ta "buscando a outra classe que ele vai abrir no section" que seria a rota
+										//a principal é a layout então as outra vão ser carregadas aqui no section
+										{ this.props.children }
+								</section>
+										// rodape do nosso sistema 
+								<footer>
+											Alguma dúvida? Entre em contato!
+										contato@leansurvey.com.br
+								</footer>
+					</div>
 			</MuiThemeProvider>
 		);
 	}
