@@ -54,7 +54,7 @@ class NovaEmpresa extends React.Component {
 
   handleSubmit = () => {
     var post = JSON.stringify(this.state);    
-    fetch("http://localhost/Senai-LeanSurvey/enterprise",{
+    fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise",{
       method: "post",
      
       body: post,

@@ -21,7 +21,21 @@ class CardQuestionario extends Component{
 
   handleClose = () => {
     this.setState({open: false});
-  }; render()
+  };
+  
+  
+  
+    componentDidMount(){
+    this.props.empresa;
+    console.log(this.props.empresa)
+    console.log(this.state)
+
+  }
+
+
+  
+  
+   render()
     {   const actions = [
       <FlatButton
         label="Cancelar"

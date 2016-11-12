@@ -44,7 +44,7 @@ class ListEmpresas extends React.Component {
 
     // this.state.empresass
 
-    fetch('http://localhost/Senai-LeanSurvey/enterprise/', {
+    fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/', {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -90,6 +90,7 @@ class ListEmpresas extends React.Component {
   handleEdit = (empresa) => {
     
    this.setState({
+
      empresa:empresa,
      open:true
     })
@@ -128,16 +129,31 @@ class ListEmpresas extends React.Component {
     }
   };
 
+  handleCadastrar = () => {
+    
+   this.setState({
+
+     empresa:null,
+     open:true
+     
+    })
+    this.handleOpen();
+    // chamar a modal , e enviar os parametros e la no modal receber como this.prop.empresa**
+  };
+
+
   //ele vai renderizar as empresas mapeando e trazendo os dados
   renderEmpresas() {
     //aqui esta mapeando as empresas por exemplo mandado a empresa 1 depois a 2 depois a 3 tipo um array
-    return this.state.empresas.map((empresa) => {
+    return this.state.empresas.map((empresa, i) => {
+
       // aqui ele esta retornando a empresa ja mapeada mandou la em dados o id da empresa por exemplo e o metodo de HandleNext que é ir para proxima pagina
-      return (<Empresa dados={empresa} handleNext={this.selectEmpresa} handleEdit={this.handleEdit.bind(this, empresa)} />);
+      return (<Empresa key={i} dados={empresa} handleNext={this.selectEmpresa} handleEdit={this.handleEdit.bind(this, empresa)} />);
+    
     })
   }
   renderQuestionariosEmpresa() {
-    return (<QuestionariosEmpresa handleNext={this.handleNext}/>);
+    return (<QuestionariosEmpresa handleNext={this.handleNext} empresa={this.state.empresa}/>);
   }
   renderNovoQuestionario() {
     return (<NovoQuestionario  />);
@@ -153,7 +169,7 @@ class ListEmpresas extends React.Component {
           
             <TextField fullWidth={true} style={{ marginTop: 0 }} floatingLabelText="Pesquisar Empresa" />
         <div>
-          <RaisedButton label="Adicionar Empresa" onTouchTap={this.handleOpen} />
+          <RaisedButton label="Adicionar Empresa" onTouchTap={this.handleCadastrar} />
           <Dialog
             title="Cadastro de Empresa"
             autoScrollBodyContent={true}
@@ -162,7 +178,7 @@ class ListEmpresas extends React.Component {
             open={this.state.open}
             onRequestClose={this.handleClose}
           >
-            {this.state.empresa && <EditarEmpresa/>}
+            {this.state.empresa && <EditarEmpresa empresa={this.state.empresa} />}
             {!this.state.empresa && <NovaEmpresa/>}
 
           </Dialog>

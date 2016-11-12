@@ -39,8 +39,22 @@ const styleImg = {
 
 
 class Empresa extends Component {
+handleDelete=()=>{
+    var put = JSON.stringify(this.state);    
+    fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise/"+this.props.dados.id,{
+      method: "delete",
+     
+body: put,
+       headers: {
+            'Content-Type': 'application/json'
+       }
+    })
+    .then(response=> response.json())
+    .then(response=>{
+      console.log(response);
+    });
 
-  
+  }
   render() {
     
 
@@ -55,7 +69,7 @@ class Empresa extends Component {
               >
               <MenuItem primaryText="Editar" onClick={this.props.handleEdit} />
               
-              <MenuItem primaryText="Excluir" />
+              <MenuItem primaryText="Excluir" onClick={this.handleDelete} />
             </IconMenu>
             <CardTitle title={this.props.dados.name} style={{ float: 'left' }} />
           </CardHeader>
