@@ -19,25 +19,24 @@ const style = {
 };
 
 class ListEmpresas extends React.Component {
- state = {
-    open: false,
-    empresa: null,
-    questionario: null
-  };
 
   handleOpen = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   };
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   };
 
   state = {
     loading: false,
     finished: false,
     stepIndex: 0,
-    empresas: []
+    empresas: [],
+    open: false,
+    empresa: null,
+    questionario: null,
+    searchEmpresaString: ''
   };
 
   componentDidMount() {
@@ -60,6 +59,25 @@ class ListEmpresas extends React.Component {
       });
   }
 
+  getQuestionario() {
+
+    // this.state.quesstionario
+
+    fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/'+29+'/q', {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(response => {
+        this.setState({
+          empresas: response
+        })
+      })
+      .catch(erro => {
+
+      });
+  }
 
   dummyAsync = (cb) => {
     this.setState({ loading: true }, () => {
@@ -88,35 +106,83 @@ class ListEmpresas extends React.Component {
   // }
 
   handleEdit = (empresa) => {
-    
-   this.setState({
 
-     empresa:empresa,
-     open:true
+    this.setState({
+
+      empresa: empresa,
+      open: true
     })
-    
+
     // chamar a modal , e enviar os parametros e la no modal receber como this.prop.empresa**
   };
 
-  //proxima pagina que tem que ir
-  handleNext = () => {
+  handleDelete = (idDeletado) =>  {
+    this.setState({
+      empresas: this.state.empresas.filter(empresa => empresa.id !== idDeletado)
+    })
+
+     // this.state.empresas.push(empresa)
+  }
+  
+
+  vaiProximo = () => {
     const {stepIndex} = this.state;
+    var finished = stepIndex >= 2,
+        nextStep = stepIndex + 1;
+
+    this.setState({
+      loading: false,
+      stepIndex: nextStep,
+      finished: finished,
+    });
+  }
+
+  //proxima pagina que tem que ir
+  handleNext = (dadosEmpresa) => {
+    const {stepIndex} = this.state;
+    var finished = stepIndex >= 2,
+        nextStep = stepIndex + 1;
+
     if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
-      }));
+      
+      if(nextStep == 1) {
+
+        fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/'+dadosEmpresa.id+'/q')
+          .then(response => response.json())
+          .then(response => {
+            
+            this.setState({
+              questionarios: response
+            });
+
+            this.vaiProximo()
+          });
+
+      } else {
+        this.vaiProximo();
+      }
+
+      
+
+      // this.dummyAsync(() => this.setState({
+      //   loading: false,
+      //   stepIndex: stepIndex + 1,
+      //   finished: stepIndex >= 2,
+      // }));
+
     }
-  };
+  }
 
   selectEmpresa = (dadosEmpresa) => {
-    console.log(dadosEmpresa);
-      this.setState({
-        empresa: dadosEmpresa
-      })
-      this.handleNext();
+    
+    // this.setState({
+    //   empresa: dadosEmpresa
+    // });
+
+    this.handleNext(dadosEmpresa);
   }
+
+
 
   //pagina anterio que tem que ir empresa null no close
   handlePrev = () => {
@@ -124,39 +190,75 @@ class ListEmpresas extends React.Component {
     if (!this.state.loading) {
       this.dummyAsync(() => this.setState({
         loading: false,
-        stepIndex: stepIndex - 1,
+        stepIndex: stepIndex - 1
       }));
     }
   };
 
   handleCadastrar = () => {
-    
-   this.setState({
 
-     empresa:null,
-     open:true
-     
+    this.setState({
+
+      empresa: null,
+      open: true
+
     })
     this.handleOpen();
     // chamar a modal , e enviar os parametros e la no modal receber como this.prop.empresa**
   };
 
 
+
+
+  handleSubmitEditEmpresa = (empresa) => {
+    var put = JSON.stringify(empresa);
+    fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise/" + empresa.id, {
+      method: "put",
+
+      body: put,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(response => {
+        for (var i = 0; i < this.state.empresas.length; i++) {
+          if (this.state.empresas[i].id === empresa.id) {
+            this.state.empresas[i] = response[0];
+          }
+        }
+      });
+  }
+
+
   //ele vai renderizar as empresas mapeando e trazendo os dados
   renderEmpresas() {
-    //aqui esta mapeando as empresas por exemplo mandado a empresa 1 depois a 2 depois a 3 tipo um array
-    return this.state.empresas.map((empresa, i) => {
-
-      // aqui ele esta retornando a empresa ja mapeada mandou la em dados o id da empresa por exemplo e o metodo de HandleNext que é ir para proxima pagina
-      return (<Empresa key={i} dados={empresa} handleNext={this.selectEmpresa} handleEdit={this.handleEdit.bind(this, empresa)} />);
     
-    })
+    //aqui esta mapeando as empresas por exemplo mandado a empresa 1 depois a 2 depois a 3 tipo um array
+    return this.state.empresas
+      .filter(empresa => {
+        return empresa.name.toLowerCase().indexOf(this.state.searchEmpresaString) > -1;
+      })
+      .map((empresa, i) => {
+        // aqui ele esta retornando a empresa ja mapeada mandou la em dados o id da empresa por exemplo e o metodo de HandleNext que é ir para proxima pagina
+        return (<Empresa key={i} 
+                  dados={empresa} 
+                  handleNext={this.selectEmpresa.bind(this, empresa)} 
+                  handleDelete={this.handleDelete}
+                  handleEdit={this.handleEdit.bind(this, empresa)} />);
+
+      })
   }
-  renderQuestionariosEmpresa() {
-    return (<QuestionariosEmpresa handleNext={this.handleNext} empresa={this.state.empresa}/>);
-  }
+
   renderNovoQuestionario() {
-    return (<NovoQuestionario  />);
+    return (<NovoQuestionario empresa={this.state.empresa} />);
+  }
+
+
+  searchEmpresa(evento) {
+    this.setState({
+      searchEmpresaString: evento.target.value.toLowerCase()
+    })
   }
 
 
@@ -166,35 +268,46 @@ class ListEmpresas extends React.Component {
       case 0:
         return (
           <div>
-          
-            <TextField fullWidth={true} style={{ marginTop: 0 }} floatingLabelText="Pesquisar Empresa" />
-        <div>
-          <RaisedButton label="Adicionar Empresa" onTouchTap={this.handleCadastrar} />
-          <Dialog
-            title="Cadastro de Empresa"
-            autoScrollBodyContent={true}
-            empresa={this.state.empresa}
-            modal={false}
-            open={this.state.open}
-            onRequestClose={this.handleClose}
-          >
-            {this.state.empresa && <EditarEmpresa empresa={this.state.empresa} />}
-            {!this.state.empresa && <NovaEmpresa/>}
 
-          </Dialog>
-        </div>
-        <div onTouchTap={this.props.handleNext} style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {this.renderEmpresas()}
-        </div>
-      </div>
+            <TextField 
+              fullWidth={true} 
+              style={{ marginTop: 0 }}
+              onChange={this.searchEmpresa.bind(this)} 
+              floatingLabelText="Pesquisar Empresa" />
+
+            <div>
+              <RaisedButton label="Adicionar Empresa" onTouchTap={this.handleCadastrar} />
+              <Dialog
+                title="Cadastro de Empresa"
+                autoScrollBodyContent={true}
+                empresa={this.state.empresa}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+                >
+                {this.state.empresa && <EditarEmpresa empresa={this.state.empresa} handleSubmit={this.handleSubmitEditEmpresa} />}
+                {!this.state.empresa && <NovaEmpresa handleClose={this.handleClose} />}
+
+              </Dialog>
+            </div>
+            <div onTouchTap={this.props.handleNext} style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {this.renderEmpresas()}
+            </div>
+          </div>
         );
       case 1:
         return (
           <div>
-            <TextField style={{ marginTop: 0 }} floatingLabelText="Pesquisar Questionario" />  <br />
+
+      <TextField 
+              fullWidth={true} 
+              style={{ marginTop: 0 }}
+            
+              floatingLabelText="Pesquisar Questionario" />
+
             <RaisedButton label="Adicionar Questionario" primary={true} style={style} href="/admin/empresa/questionario/novo" />
             <div onTouchTap={this.props.handleNext} style={{ display: 'flex' }}>
-              {this.renderQuestionariosEmpresa()}
+              <QuestionariosEmpresa handleNext={this.handleNext} empresa={this.state.idEmpresaSelecionada} questionarios={this.state.questionarios} />
 
             </div>
 
@@ -269,9 +382,9 @@ class ListEmpresas extends React.Component {
             <StepLabel>Criar um Questionario</StepLabel>
           </Step>
         </Stepper>
- 
-    
-          {this.renderContent()}
+
+
+        {this.renderContent()}
 
       </div>
     );

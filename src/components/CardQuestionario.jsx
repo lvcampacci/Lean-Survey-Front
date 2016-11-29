@@ -11,6 +11,24 @@ import RaisedButton from 'material-ui/RaisedButton';
  
 
 class CardQuestionario extends Component{
+  handleDeleteQuestionario = () => {
+    var put = JSON.stringify(this.state);
+    fetch("http://xabuco.com.br/Senai-LeanSurvey/questionnaire/" + this.props.dados.id, {
+      method: "delete",
+
+      body: put,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => {
+        this.props.handleDelete(this.props.dados.id);
+      });
+      this.handleClose();
+  }
+
+
+
     state = {
     open: false,
   };
@@ -45,27 +63,27 @@ class CardQuestionario extends Component{
       <FlatButton
         label="Excluir"
         primary={true}
-        onTouchTap={this.handleClose}
+
+        onTouchTap={this.handleDeleteQuestionario}
       />,
     ];
         return(
             <Card>
                 <CardTitle title={this.props.questionario.title} />
                 <CardText>
-                    {this.props.questionario.descricao}
+                    {this.props.questionario.description}
                 </CardText>
                 <CardActions>
                     <FlatButton label="Editar" onTouchTap={this.props.handleNext}/>
-              <FlatButton onClick={this.props.handleNext} label="Acessar Questionarios" style={{ color: "#4FC3F7" }} primary={true} />
-
-        <RaisedButton label="Excluir" onTouchTap={this.handleOpen} />
+          
+   <FlatButton label="Excluir" onTouchTap={this.handleOpen}/>
         <Dialog
           actions={actions}
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-       Tem certeza que deseja excluir essa merda ?
+       Tem certeza que deseja excluir esse questionario ?
         </Dialog>
     
                 </CardActions>

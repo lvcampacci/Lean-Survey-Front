@@ -66,14 +66,15 @@ class NovoQuestionario extends React.Component {
   }
  
   render() {
+    var DateTimeFormat = global.Intl.DateTimeFormat;
     const actions = [
       <FlatButton
-        label="Cancel"
+        label="Cancelar"
         primary={true}
         onTouchTap={this.handleClose}
         />,
       <FlatButton
-        label="Submit"
+        label="Cadastar"
         primary={true}
 
         onTouchTap={this.handleClose}
@@ -102,8 +103,8 @@ class NovoQuestionario extends React.Component {
             rowsMax={4}
             />
   <div>
-    <DatePicker locale="br-pt" hintText="Coloque a data inicial do questionario" />
-        <DatePicker hintText="Coloque a data final do questionario" />
+    <DatePicker DateTimeFormat={DateTimeFormat} locale="pt-BR" hintText="Coloque a data inicial do questionario"  okLabel="Ok" cancelLabel="Cancelar" />
+        <DatePicker DateTimeFormat={DateTimeFormat} locale="pt-BR" hintText="Coloque a data final do questionario" okLabel="Ok" cancelLabel="Cancelar"/>
   </div>
           <ListItem
             leftAvatar={<Avatar icon={<FileFolder />} />}

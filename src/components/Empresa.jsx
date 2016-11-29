@@ -10,7 +10,9 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import Dialog from 'material-ui/Dialog';
 
+import RaisedButton from 'material-ui/RaisedButton';
 const styles = {
   root: {
     display: 'flex',
@@ -33,30 +35,51 @@ const tilesData = [
 ];
 
 const styleImg = {
-        maxHeight: "210px",
-        objectFit: "contain"
-    };
+  maxHeight: "210px",
+  objectFit: "contain"
+};
 
 
 class Empresa extends Component {
-handleDelete=()=>{
-    var put = JSON.stringify(this.state);    
-    fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise/"+this.props.dados.id,{
+  handleDelete = () => {
+    var put = JSON.stringify(this.state);
+    fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise/" + this.props.dados.id, {
       method: "delete",
-     
-body: put,
-       headers: {
-            'Content-Type': 'application/json'
-       }
-    })
-    .then(response=> response.json())
-    .then(response=>{
-      console.log(response);
-    });
 
+      body: put,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => {
+        this.props.handleDelete(this.props.dados.id);
+      });
   }
+  state = {
+    open: false,
+  };
+
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
   render() {
-    
+
+    const actions = [
+      <FlatButton
+        label="Cancelar"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Excluir"
+        primary={true}
+        onTouchTap={this.handleDelete}
+      />,
+    ];
 
     return (
       <div>
@@ -67,13 +90,22 @@ body: put,
               anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
               targetOrigin={{ horizontal: 'left', vertical: 'top' }}
               >
-              <MenuItem primaryText="Editar" onClick={this.props.handleEdit} />
-              
-              <MenuItem primaryText="Excluir" onClick={this.handleDelete} />
+              <MenuItem primaryText="Editar" onTouchTap={this.props.handleEdit} />
+
+              <MenuItem primaryText="Excluir" onTouchTap={this.handleOpen}  />
             </IconMenu>
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+       Deseja mesmo excluir a empresa {this.props.name}?
+        </Dialog>
+
             <CardTitle title={this.props.dados.name} style={{ float: 'left' }} />
           </CardHeader>
-          <CardMedia style={{cursor: "pointer"}} onClick={this.props.handleNext}>
+          <CardMedia style={{ cursor: "pointer" }} onClick={this.props.handleNext}>
             <img style={styleImg} src={redtube} />
           </CardMedia>
 

@@ -26,7 +26,7 @@ class QuestionariosEmpresa extends React.Component{
 		return (
 			<div >
 				{
-					questionarios.map((item)=>{
+					this.props.questionarios.map((item)=>{
 						return <CardQuestionario questionario={item} />
 					})
 				}

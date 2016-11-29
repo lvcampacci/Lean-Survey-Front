@@ -28,7 +28,21 @@ img {
 }
 section{
 	text-align: center;
-    background-color: #ECF3F7;
+    background-color: #ECF3F7;   
+}
 
-    
+
+.nav-ls {
+    display: inline-block;
+}
+
+.nav-ls li {
+    display: inline-block;
+    margin: 8px;
+}
+
+.nav-ls li a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #fff;
 }
