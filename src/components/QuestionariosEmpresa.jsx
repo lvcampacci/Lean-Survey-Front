@@ -7,22 +7,9 @@ import CardQuestionario from './CardQuestionario.jsx';
 
 class QuestionariosEmpresa extends React.Component{
 
+	
+
 	render() {
-		// Vai pedir pra API!!!!!!!!
-		var questionarios = [
-			{
-				title: "NOME DO QUESTIONARIO",
-				descricao: "Questionário para verificar se eu vouy passar de ano no JPMORGAN :))) "
-			},
-			{
-				title: "BRAZZER QUESTIONARIO",
-				descricao: "Questionário para verificar se eu vouy passar de ano no JPMORGAN :))) "
-			},
-			{
-				title: "BRAZZER QUESTIONARIO",
-				descricao: "Questionário para verificar se eu vouy passar de ano no JPMORGAN :))) "
-			}
-		];
 		return (
 			<div >
 				{

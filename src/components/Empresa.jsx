@@ -15,9 +15,7 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 const styles = {
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+
   },
   gridList: {
     width: 500,
@@ -60,11 +58,11 @@ class Empresa extends Component {
   };
 
   handleOpen = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   };
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   };
   render() {
 
@@ -73,38 +71,29 @@ class Empresa extends Component {
         label="Cancelar"
         primary={true}
         onTouchTap={this.handleClose}
-      />,
+        />,
       <FlatButton
         label="Excluir"
         primary={true}
         onTouchTap={this.handleDelete}
-      />,
+        />,
     ];
 
     return (
-      <div>
+      <div style={{ float: 'left', width: 310, margin: 8, overflow: 'hidden' }}>
         <Card>
           <CardHeader>
             <IconMenu
-              iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+              iconButtonElement={<IconButton style={{ transform: 'translateX(80px)', zIndex: 1 }}><MoreVertIcon /></IconButton>}
               anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-              targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-              >
+              targetOrigin={{ horizontal: 'left', vertical: 'top' }}>
               <MenuItem primaryText="Editar" onTouchTap={this.props.handleEdit} />
-
-              <MenuItem primaryText="Excluir" onTouchTap={this.handleOpen}  />
+              <MenuItem primaryText="Excluir" onTouchTap={this.handleOpen} />
             </IconMenu>
-        <Dialog
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-        >
-       Deseja mesmo excluir a empresa {this.props.name}?
-        </Dialog>
 
-            <CardTitle title={this.props.dados.name} style={{ float: 'left' }} />
+            <CardTitle title={this.props.dados.name} style={{ marginTop: -50 }} />
           </CardHeader>
+
           <CardMedia style={{ cursor: "pointer" }} onClick={this.props.handleNext}>
             <img style={styleImg} src={redtube} />
           </CardMedia>
@@ -112,6 +101,14 @@ class Empresa extends Component {
           <FlatButton onClick={this.props.handleNext} label="Acessar Questionarios" style={{ color: "#4FC3F7" }} primary={true} />
 
         </Card>
+
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}>
+          Deseja mesmo excluir a empresa {this.props.name}?
+        </Dialog>
       </div>
     );
   }

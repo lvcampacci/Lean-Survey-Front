@@ -38,11 +38,12 @@ const styles = {
 class NovoQuestionario extends React.Component {
   state = {
     open: false,
-    questionario:{
+    questionario: {
       titulo: '',
       descricao: ''
-    
-    }
+
+    },
+    questoes: []
   };
 
   handleOpen = () => {
@@ -52,7 +53,48 @@ class NovoQuestionario extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  handleChange = (ev)=>{
+
+
+  handleCadastrar = () => {
+    var pergunta = this.refs.novaPergunta.state;
+
+
+    // .map
+    // nome - stringify
+    // perguntas = ["fawefaw", "fawefawef"]
+
+
+    var dados = {
+      title: pergunta.titulo,
+      description: pergunta.descricao,
+      questions: pergunta.respostas,
+      questionType: pergunta.questionType
+    };
+
+
+    this.setState({
+      questoes: this.state.questoes.concat(dados)
+    });
+
+
+    dados = JSON.stringify(dados);
+
+    console.log(dados);
+
+
+    this.handleClose();
+
+    
+    // fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/', {
+    //   method: 'POST',
+    //   body: dados
+    // })
+    //   .then((response) => response.json())
+
+  };
+
+
+  handleChange = (ev) => {
     var questionario = this.state.questionario;
     questionario.titulo = ev.target.value;
     this.setState({
@@ -64,7 +106,25 @@ class NovoQuestionario extends React.Component {
     var dados = this.state.questionario
     dados.empresaid = this.props.empresaid
   }
- 
+
+
+
+
+
+  renderQuestoes() {
+    return this.state.questoes.map((questao, i) => (
+      <ListItem
+        key={i}
+        leftAvatar={<Avatar icon={<FileFolder />} />}
+        rightIcon={<ActionInfo />}
+        primaryText={questao.title}
+        secondaryText={questao.description}
+        />
+    ))
+
+  }
+
+
   render() {
     var DateTimeFormat = global.Intl.DateTimeFormat;
     const actions = [
@@ -73,68 +133,63 @@ class NovoQuestionario extends React.Component {
         primary={true}
         onTouchTap={this.handleClose}
         />,
-      <FlatButton
+      <RaisedButton
         label="Cadastar"
         primary={true}
 
-        onTouchTap={this.handleClose}
+        onTouchTap={this.handleCadastrar}
         />,
     ];
 
 
     return (
-      <div style={{ margin: "10px auto" }}>
+      <div style={{ margin: "10px auto", width: '50%' }}>
+
+        <h3>MEU título é: {this.state.questionario.titulo}</h3>
+        <TextField
+          hintText="Digite aqui o titulo do questionario"
+          floatingLabelText="Título"
+          fullWidth={true}
+          value={this.state.questionario.titulo}
+          onChange={this.handleChange}
+
+          />
+
+
+        <TextField
+          hintText="Digite a Descrição do questionario"
+          multiLine={true}
+          fullWidth={true}
+          rowsMax={4}
+          />
+
+        <div>
+          <DatePicker DateTimeFormat={DateTimeFormat} locale="pt-BR" hintText="Coloque a data inicial do questionario" okLabel="Ok" cancelLabel="Cancelar" fullWidth={true} />
+          <DatePicker DateTimeFormat={DateTimeFormat} locale="pt-BR" hintText="Coloque a data final do questionario" okLabel="Ok" cancelLabel="Cancelar" fullWidth={true} />
+        </div>
+
+        <h5>Questões</h5>
+
+
         <List>
-          <h3>MEU título é: {this.state.questionario.titulo}</h3>
-          <TextField
-            hintText="Digite aqui o titulo do questionario"
-            floatingLabelText="Título"
-            fullWidth={true}
-            value={this.state.questionario.titulo}
-            onChange={this.handleChange}
-          
-            />
-     
+          {this.renderQuestoes()}
+        </List>
 
-          <TextField
-            hintText="Digite a Descrição do questionario"
-            multiLine={true}
-            
-            rowsMax={4}
-            />
-  <div>
-    <DatePicker DateTimeFormat={DateTimeFormat} locale="pt-BR" hintText="Coloque a data inicial do questionario"  okLabel="Ok" cancelLabel="Cancelar" />
-        <DatePicker DateTimeFormat={DateTimeFormat} locale="pt-BR" hintText="Coloque a data final do questionario" okLabel="Ok" cancelLabel="Cancelar"/>
-  </div>
-          <ListItem
-            leftAvatar={<Avatar icon={<FileFolder />} />}
-            rightIcon={<ActionInfo />}
-            primaryText="Qual seu nome?"
-            secondaryText="Dissertativa"
-            />
-          <ListItem
-            leftAvatar={<Avatar icon={<FileFolder />} />}
-            rightIcon={<Edit />}
-            primaryText="Qual as cores da sua calcinha?"
-            secondaryText="Check"
-            />
-          <ListItem />
-           </List>
+        <RaisedButton label="Adicionar Pergunta" onTouchTap={this.handleOpen} />
+        <Dialog
+          contentStyle={{ transform: 'translate(0, -18%)' }}
+          title="Nova Pergunta"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+          autoScrollBodyContent={true}
+          >
+          <NovaPergunta ref="novaPergunta" questionario={this.state.questionario} />
+        </Dialog>
 
-            <RaisedButton label="Adicionar Pergunta" onTouchTap={this.handleOpen} />
-            <Dialog
-              title="Nova Pergunta"
-              actions={actions}
-              modal={false}
-              open={this.state.open}
-              onRequestClose={this.handleClose}
-              autoScrollBodyContent={true}
-              >
-              <NovaPergunta questionario={this.state.questionario} />
-            </Dialog>
-   
 
-   
+
 
       </div>
     );

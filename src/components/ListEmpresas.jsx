@@ -290,7 +290,7 @@ class ListEmpresas extends React.Component {
 
               </Dialog>
             </div>
-            <div onTouchTap={this.props.handleNext} style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div onTouchTap={this.props.handleNext} style={{float: 'left', width: '100%'}}>
               {this.renderEmpresas()}
             </div>
           </div>
@@ -305,7 +305,7 @@ class ListEmpresas extends React.Component {
             
               floatingLabelText="Pesquisar Questionario" />
 
-            <RaisedButton label="Adicionar Questionario" primary={true} style={style} href="/admin/empresa/questionario/novo" />
+            <RaisedButton label="Adicionar Questionario" primary={true} style={style} onClick={this.handleNext} />
             <div onTouchTap={this.props.handleNext} style={{ display: 'flex' }}>
               <QuestionariosEmpresa handleNext={this.handleNext} empresa={this.state.idEmpresaSelecionada} questionarios={this.state.questionarios} />
 
@@ -357,7 +357,7 @@ class ListEmpresas extends React.Component {
             style={{ marginRight: 12 }}
             />
           <RaisedButton
-            label={stepIndex === 2 ? 'Testar' : 'Próxima'}
+            label={stepIndex === 2 ? 'Finalizar' : 'Próxima'}
             primary={true}
             onTouchTap={this.handleNext}
             />
@@ -370,7 +370,7 @@ class ListEmpresas extends React.Component {
     const {loading, stepIndex} = this.state;
 
     return (
-      <div style={{ width: '100%', maxWidth: 700, margin: 'auto' }}>
+      <div style={{ width: '100%', maxWidth: 1010, margin: 'auto' }}>
         <Stepper activeStep={stepIndex}>
           <Step>
             <StepLabel>Selecione a Empresa</StepLabel>
@@ -382,10 +382,7 @@ class ListEmpresas extends React.Component {
             <StepLabel>Criar um Questionario</StepLabel>
           </Step>
         </Stepper>
-
-
         {this.renderContent()}
-
       </div>
     );
   }

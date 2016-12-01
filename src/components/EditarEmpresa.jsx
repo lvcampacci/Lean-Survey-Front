@@ -135,13 +135,16 @@ class EditarEmpresa extends React.Component {
           fullWidth={true}
           type='email'
           />
-            <div>
-    Busque o logo da empresa
-          <FlatButton label="Buscar" labelPosition="before" >
-              <input type="file" style={styles.exampleImageInput} name="logoPath" />
-          </FlatButton><br/>
-       
-</div>  
+ <TextField
+          hintText="Digite a url da imagem"
+          floatingLabelText="Imagem"
+          value={this.state.logoPath}
+          onChange={this.handleChange}
+          name="logoPath"
+          fullWidth={true}
+          
+          />
+
  
         <FlatButton
           label="Editar"

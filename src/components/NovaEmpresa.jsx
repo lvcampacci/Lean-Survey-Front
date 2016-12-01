@@ -24,11 +24,6 @@ const styles = {
   },
 };
 
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.split(search).join(replacement);
-};
-
 class NovaEmpresa extends React.Component {
   constructor(props) {
     super(props);
@@ -87,29 +82,30 @@ class NovaEmpresa extends React.Component {
   }
 
   handleSubmit = () => {
-    var formData = new FormData();
-    formData.append('name', this.state.name);
-        formData.append('cnpj', this.state.cnpj);
-        formData.append('address', this.state.address);
-            formData.append('contactName', this.state.contactName);
-        formData.append('contactNumber', this.state.contactNumber);
-        formData.append('email', this.state.email);
-    formData.append('logoPath', this.state.logoPath)
-    // var post = {
-    //   name: this.state.name,
-    //   cnpj: this.state.cnpj.replaceAll('.', '').replaceAll('-', '').replaceAll('/', ''),
-    //   address: this.state.address,
-    //   contactName: this.state.contactName,
-    //   contactNumber: this.state.contactNumber,
-    //   email: this.state.email,
-    //   formData: formData.append('logoPath', this.state.logoPath)
-    // };
+    this.state.cnpj = this.state.cnpj || '';
+    this.state.contactNumber = this.state.contactNumber || '';
 
-    //post = JSON.stringify(post);
+    var post = {
+      name: this.state.name,
+      cnpj: this.state.cnpj.replace(/\.|\-|\//g , ''),
+      address: this.state.address,
+      contactName: this.state.contactName,
+      contactNumber: this.state.contactNumber.replace( /\(|\)|\-/g , ''),
+      email: this.state.email,
+      logoPath: this.state.logoPath
+    };
+
+    post = JSON.stringify(post);
+
+
 
     fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise", {
       method: "post",
-      body: formData
+      body: post,
+      mode: 'cors',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json', 
+      cache: 'default'
     })
       .then(response => response.json())
       .then(response => {
@@ -119,6 +115,7 @@ class NovaEmpresa extends React.Component {
       .catch(error => {
         this.props.handleClose();
       })
+
   }
 
 
@@ -212,18 +209,19 @@ class NovaEmpresa extends React.Component {
           fullWidth={true}
           
           />
+      <TextField
+          hintText="Digite a url da imagem"
+          floatingLabelText="Imagem"
+          value={this.state.logoPath}
+          onChange={this.handleChange}
+          name="logoPath"
+          fullWidth={true}
+          
+          />
 
 
 
-        <div>
-          Busque o logo da empresa
-          <FlatButton label="Escolher arquivo" labelPosition="before" >
-            <input type="file" style={styles.exampleImageInput} name="logoPath" onChange={this.validateFile.bind(this)} />
-          </FlatButton><br />
-          { this.state.imageError }
-        </div>
-
-        <FlatButton
+        <RaisedButton
           label="Cadastrar"
           primary={true}
           onTouchTap={this.handleTouchTap}

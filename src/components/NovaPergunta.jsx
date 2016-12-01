@@ -5,13 +5,12 @@ import Dialog from 'material-ui/Dialog';
 import { List, ListItem } from 'material-ui/List';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import Divider from 'material-ui/Divider';
-import Subheader from 'material-ui/Subheader';
-import Avatar from 'material-ui/Avatar';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ReactDOM from 'react-dom';
-import Draggable from 'react-draggable';
 import { blue500, yellow600 } from 'material-ui/styles/colors';
 import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import FlatButton from 'material-ui/FlatButton';
@@ -34,22 +33,11 @@ class NovaPergunta extends React.Component {
     respostas: [],
     condicoes: [],
     _index: 0,
-    novapergunta:{
-      titulo:"",
-      descricaopergunta:""
-    }
   };
 
-  statepergunta = {
 
-  }
-
-handleChange = (ev)=>{
-  var novapergunta = this.state.novapergunta;
-  novapergunta.titulo = ev.target.value;
-  this.setState({
-      novapergunta: novapergunta
-  });
+handleChange = (event)=>{
+    this.setState({ [event.target.name]: event.target.value});
 }
   addResposta() {
 
@@ -104,34 +92,15 @@ handleChange = (ev)=>{
   }
 
 
+  renderResposta() {
+    if(this.state.questionType == 1)
+    return <h5>Questão dissertativa</h5>
 
-  render() {
-    
-    console.log("renderiznado");
+
     return (
       <div>
-        <TextField
-          hintText="Digite aqui o titulo da pergunta"
-          floatingLabelText="Titulo da Pergunta"
-          fullWidth={true}
-          value = {this.state.novapergunta.titulo}
-          onChange={this.handleChange}
-          name="titulo"
-          />
-           <h3>MEU título é: {this.state.novapergunta.titulo}</h3>
-        <TextField
-          hintText="Digite a Descrição da pergunta "
-            floatingLabelText="Descrição da Pergunta"
-          multiLine={true}
-          fullWidth={true}
-          rowsMax={4}
-          />
-            <Toggle
-      label="Obrigatória"
-      labelPosition="right"
-    />
         Respostas
-          <List>
+        <List>
           {this.renderRespostas()}
           <ListItem
             onClick={this.addResposta.bind(this)}
@@ -139,6 +108,46 @@ handleChange = (ev)=>{
             primaryText="Adicione uma nova Resposta"
             />
         </List>
+      </div>
+    )
+  }
+
+
+
+  render() {
+    return (
+      <div>
+        <TextField
+          hintText="Digite aqui o titulo da pergunta"
+          floatingLabelText="Titulo da Pergunta"
+          fullWidth={true}
+          value = {this.state.titulo}
+          onChange={this.handleChange}
+          name="titulo"
+          />
+        <TextField
+          hintText="Digite a Descrição da pergunta "
+          floatingLabelText="Descrição da Pergunta"
+          multiLine={true}
+                  onChange={this.handleChange}
+          value = {this.state.descricao}
+          fullWidth={true}
+          name="descricao"
+          rowsMax={4}
+          />
+        
+        <SelectField
+          name="questionType"
+          value={this.state.questionType}
+          onChange={(e, key, value) => this.setState({questionType: value})}
+          fullWidth={true}
+          floatingLabelText="Tipo de pergunta">
+          <MenuItem value={1} primaryText="Dissertativa" />
+          <MenuItem value={2} primaryText="Multipla escolha" />
+          <MenuItem value={3} primaryText="Alternativa" />
+        </SelectField>
+        
+          { this.renderResposta() }
 
       </div>
 
