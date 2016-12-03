@@ -13,7 +13,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 class CardQuestionario extends Component {
   handleDeleteQuestionario = () => {
     var put = JSON.stringify(this.state);
-    fetch("http://xabuco.com.br/Senai-LeanSurvey/questionnaire/" + this.props.dados.id, {
+    fetch("http://xabuco.com.br/Senai-LeanSurvey/questionnaire/" + this.props.questionario.id, {
       method: "delete",
 
       body: put,
@@ -22,7 +22,8 @@ class CardQuestionario extends Component {
       }
     })
       .then(response => {
-        this.props.handleDelete(this.props.dados.id);
+        console.log(this.props)
+        this.props.handleDeleteQuestionario();
       });
     this.handleClose();
   }

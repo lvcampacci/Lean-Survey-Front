@@ -108,7 +108,11 @@ class NovoQuestionario extends React.Component {
   }
 
 
-
+  handleRemoveItem(index) {
+    this.setState({
+      questoes: this.state.questoes.filter((questao, i) => i !== index)
+    })
+  }
 
 
   renderQuestoes() {
@@ -116,7 +120,7 @@ class NovoQuestionario extends React.Component {
       <ListItem
         key={i}
         leftAvatar={<Avatar icon={<FileFolder />} />}
-        rightIcon={<ActionInfo />}
+        rightIcon={<ActionInfo onClick={() => this.handleRemoveItem(i)}/>}
         primaryText={questao.title}
         secondaryText={questao.description}
         />
@@ -154,7 +158,14 @@ class NovoQuestionario extends React.Component {
           onChange={this.handleChange}
 
           />
+  <TextField
+          hintText="Coloque o preço"
+          floatingLabelText="Preço"
+          fullWidth={true}
+          value={this.state.questionario.price}
+          onChange={this.handleChange}
 
+          />
 
         <TextField
           hintText="Digite a Descrição do questionario"

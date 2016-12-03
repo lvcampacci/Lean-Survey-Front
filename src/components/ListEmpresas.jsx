@@ -63,7 +63,7 @@ class ListEmpresas extends React.Component {
 
     // this.state.quesstionario
 
-    fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/'+29+'/q', {
+    fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/'+29+'/questionnaire', {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -138,7 +138,7 @@ class ListEmpresas extends React.Component {
   }
 
   //proxima pagina que tem que ir
-  handleNext = (dadosEmpresa) => {
+  handleNext = (empresa) => {
     const {stepIndex} = this.state;
     var finished = stepIndex >= 2,
         nextStep = stepIndex + 1;
@@ -147,7 +147,7 @@ class ListEmpresas extends React.Component {
       
       if(nextStep == 1) {
 
-        fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/'+dadosEmpresa.id+'/q')
+        fetch('http://xabuco.com.br/Senai-LeanSurvey/enterprise/'+empresa.id+'/questionnaire')
           .then(response => response.json())
           .then(response => {
             
@@ -261,6 +261,9 @@ class ListEmpresas extends React.Component {
     })
   }
 
+  handleDeleteQuestionario() {
+    console.log(arguments)
+  }
 
   getStepContent(stepIndex) {
 
@@ -307,7 +310,7 @@ class ListEmpresas extends React.Component {
 
             <RaisedButton label="Adicionar Questionario" primary={true} style={style} onClick={this.handleNext} />
             <div onTouchTap={this.props.handleNext} style={{ display: 'flex' }}>
-              <QuestionariosEmpresa handleNext={this.handleNext} empresa={this.state.idEmpresaSelecionada} questionarios={this.state.questionarios} />
+              <QuestionariosEmpresa handleNext={this.handleNext} empresa={this.state.idEmpresaSelecionada} questionarios={this.state.questionarios} handleDeleteQuestionario={this.handleDeleteQuestionario} />
 
             </div>
 
@@ -356,11 +359,7 @@ class ListEmpresas extends React.Component {
             onTouchTap={this.handlePrev}
             style={{ marginRight: 12 }}
             />
-          <RaisedButton
-            label={stepIndex === 2 ? 'Finalizar' : 'Próxima'}
-            primary={true}
-            onTouchTap={this.handleNext}
-            />
+         
         </div>
       </div>
     );

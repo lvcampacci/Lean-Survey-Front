@@ -30,11 +30,10 @@ class Layout extends Component {
 						</div>
 					</header>
 					<section>
-						//this.props.children ele ta "buscando a outra classe que ele vai abrir no section" que seria a rota
-						//a principal é a layout então as outra vão ser carregadas aqui no section
+		
 						{this.props.children}
 					</section>
-					// rodape do nosso sistema 
+		
 					<footer>
 						Alguma dúvida? Entre em contato!
 										contato@leansurvey.com.br

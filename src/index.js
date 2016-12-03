@@ -19,8 +19,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 
-//Nao mecha nessa parte , aqui definimos as rotas do nosso sistema por exemplo
-//quando bater na http://localhost:3000/admin/questionario ele vai abrir a classe QuestionariosEmpresa
 ReactDOM.render(
 	(
 		<Router history={browserHistory}>

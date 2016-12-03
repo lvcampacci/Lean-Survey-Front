@@ -7,14 +7,12 @@ import CardQuestionario from './CardQuestionario.jsx';
 
 class QuestionariosEmpresa extends React.Component{
 
-	
-
 	render() {
 		return (
 			<div >
 				{
 					this.props.questionarios.map((item)=>{
-						return <CardQuestionario questionario={item} />
+						return <CardQuestionario questionario={item} handleDeleteQuestionario={ this.props.handleDeleteQuestionario(item.id) } />
 					})
 				}
 			</div>

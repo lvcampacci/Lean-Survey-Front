@@ -98,15 +98,17 @@ class NovaEmpresa extends React.Component {
     post = JSON.stringify(post);
 
 
-
+console.log(123);
     fetch("http://xabuco.com.br/Senai-LeanSurvey/enterprise", {
+      
       method: "post",
-      body: post,
+     body: post,
       mode: 'cors',
-      'Accept': 'application/json',
+     'Accept': 'application/json',
+    headers:{
       'Content-Type': 'application/json', 
-      cache: 'default'
-    })
+     cache: 'default'
+    }})
       .then(response => response.json())
       .then(response => {
         console.log(response);
@@ -115,7 +117,7 @@ class NovaEmpresa extends React.Component {
       .catch(error => {
         this.props.handleClose();
       })
-
+console.log(post);
   }
 
 

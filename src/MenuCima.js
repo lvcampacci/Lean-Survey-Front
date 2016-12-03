@@ -17,7 +17,7 @@ class MenuCima extends Component {
                      <h2>Welcome to CONTATO</h2>
           </div>
           <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
+
           </p>
            <RaisedButton label="Menu" />
         </div>
